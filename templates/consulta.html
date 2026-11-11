@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block titulo %}Consulta de cliente – Creaciones GMD{% endblock %}
+{% block contenido %}
+<div class="pag">
+<div class="vh"><h2>Consulta de cliente</h2><a class="btn g" id="csv" href="/api/csv/consulta">⬇ CSV</a></div>
+<div class="panel"><div class="fi">
+<label>Nombre del cliente<input id="nom" list="dlc" placeholder="Ej: Maribel" autocomplete="off"></label><datalist id="dlc"></datalist>
+<label>Fecha (o desde)<input type="date" id="d1"></label>
+<label>Hasta (opcional)<input type="date" id="d2"></label>
+<button class="btn" onclick="recargar()">Buscar</button><button class="btn k" onclick="limpiar()">Limpiar</button>
+</div><p style="color:var(--mut);font-size:12px;margin-top:8px">Solo una fecha = pedidos de ese día. Con “Hasta” = rango de fechas.</p></div><br>
+<div id="kp"></div>
+<div class="panel"><div id="tabla"></div></div>
+</div>
+{% endblock %}
+{% block js %}<script>
+function recargar(){var q='nombre='+encodeURIComponent($('nom').value)+'&desde='+$('d1').value+'&hasta='+$('d2').value;
+$('csv').href='/api/csv/consulta?'+q;
+api('GET','/api/consulta?'+q).then(function(L){
+$('kp').innerHTML=kp([['Pedidos',L.length],['Total gastado','S/ '+money(L.reduce(function(s,o){return s+o.precio},0))]]);
+$('tabla').innerHTML=L.length?'<div class="tw"><table><thead><tr><th>Cliente</th><th>Fecha de compra</th><th>Tipo de material</th><th>Tamaño</th><th>Precio</th></tr></thead><tbody>'+L.map(function(o){return '<tr data-id="'+o.id+'"><td>'+esc(o.cliente)+'</td><td>'+fd(o.fecha)+'</td><td>'+esc(o.material||'—')+'</td><td>'+meas(o)+'</td><td>S/ '+money(o.precio)+'</td></tr>'}).join('')+'</tbody></table></div>':'<p style="color:var(--mut);padding:14px">No hay pedidos con esos datos.</p>'},falla)}
+function limpiar(){['nom','d1','d2'].forEach(function(i){$(i).value=''});recargar()}
+$('nom').oninput=function(){clearTimeout(window._t);window._t=setTimeout(recargar,300)};$('d1').onchange=$('d2').onchange=recargar;
+api('GET','/api/clientes').then(function(C){$('dlc').innerHTML=C.map(function(c){return '<option value="'+esc(c.nombre)+'">'}).join('')});
+recargar();
+</script>{% endblock %}

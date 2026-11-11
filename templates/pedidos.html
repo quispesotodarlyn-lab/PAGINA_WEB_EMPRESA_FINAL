@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block titulo %}Pedidos – Creaciones GMD{% endblock %}
+{% block contenido %}
+<div class="pag">
+<div class="vh"><h2>Pedidos</h2><button class="btn o" onclick="formVenta()">＋ Nuevo pedido</button><a class="btn g" id="csv" href="/api/csv/pedidos">⬇ CSV</a></div>
+<div class="panel"><div class="fi"><label>Desde<input type="date" id="d1"></label><label>Hasta<input type="date" id="d2"></label><label>Estado<select id="es"><option value="">Todos</option><option value="P">En proceso</option><option value="C">Completado</option></select></label><label>Material<select id="pd"><option value="">Todos</option></select></label><button class="btn k" onclick="limpiar()">Limpiar</button></div></div><br>
+<div id="kp"></div><div class="panel" id="tabla"></div>
+</div>
+{% endblock %}
+{% block js %}<script>
+function recargar(){var q=['desde='+$('d1').value,'hasta='+$('d2').value,'estado='+$('es').value,'material='+encodeURIComponent($('pd').value)].join('&');
+api('GET','/api/pedidos?'+q).then(function(L){$('kp').innerHTML=resumen(L);$('tabla').innerHTML=tablaPedidos(L)},falla)}
+function limpiar(){['d1','d2','es','pd'].forEach(function(i){$(i).value=''});recargar()}
+['d1','d2','es','pd'].forEach(function(i){$(i).onchange=recargar});
+api('GET','/api/materiales').then(function(M){$('pd').innerHTML+=M.map(function(m){return '<option>'+esc(m.nombre)+'</option>'}).join('');recargar()},falla);
+</script>{% endblock %}

@@ -1,0 +1,41 @@
+CREACIONES GMD - HTML + Python (Flask) + JavaScript + Base de datos MySQL (XAMPP)
+
+REQUISITOS
+1. XAMPP (para MySQL)  2. Python 3.9+ (marca "Add Python to PATH")
+
+PASOS
+1. Abre XAMPP y pulsa START en MySQL.
+2. Doble clic en iniciar.bat   (o:  pip install -r requirements.txt  y  python app.py)
+3. Entra a http://localhost:5000
+Si falla la conexion: revisa config.py. Opcional: importa base_de_datos_vacia.sql en phpMyAdmin (Importar).
+4. Ver la base de datos: http://localhost/phpmyadmin  ->  creaciones_gmd
+
+REGISTRAR UN PEDIDO:  Pedidos -> "Nuevo pedido":
+nombre, telefono, tipo de material, metros (ancho y alto) y precio.
+La FECHA se pone sola (dia de la compra) y la compra queda guardada con el ID del cliente.
+Si el cliente ya existe, se usa el mismo ID.
+
+UN HTML POR SECCION (carpeta templates/)
+base.html            diseño comun: menu, buscador, banner (se repite en todas)
+inicio.html          Inicio (dashboard)
+publicaciones.html   Publicaciones (imagen + breve descripcion)
+clientes.html        Clientes
+pedidos.html         Pedidos (cliente, teléfono, material, metros, precio)
+materiales.html      Tipos de material
+reportes.html        Ganancias por mes y por año
+configuracion.html   Descargas, datos de ejemplo, borrar datos
+buscar.html          Resultados de la busqueda
+consulta.html        Consulta de cliente por nombre y fecha (material, tamaño, precio)
+
+OTROS ARCHIVOS
+app.py               Python: paginas, API y conexion a MySQL
+config.py            usuario/clave de MySQL (por defecto root sin clave)
+schema.sql           tablas VACIAS (se crean solas al iniciar)
+base_de_datos_vacia.sql  la misma base vacia para importar en phpMyAdmin
+NOTA: empieza sin datos. Solo registra tu primera compra.
+static/js/comun.js   JavaScript compartido (formularios, tablas, graficos)
+static/img/          logo y fondo del banner
+static/uploads/      imagenes de las publicaciones (se crea sola)
+
+TABLAS: clientes, pedidos, productos, materiales, publicaciones, actividades.
+Desde otra PC de la red: http://IP-DE-TU-PC:5000

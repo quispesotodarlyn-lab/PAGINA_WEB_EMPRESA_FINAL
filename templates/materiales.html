@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block titulo %}Materiales – Creaciones GMD{% endblock %}
+{% block contenido %}
+<div class="pag">
+<div class="vh"><h2>Tipos de material</h2><button class="btn o" onclick="formMaterial()">＋ Nuevo material</button></div>
+<p style="color:var(--mut);margin-bottom:10px">Los materiales también se agregan solos cuando los escribes al registrar un pedido.</p>
+<div class="panel tw"><table><thead><tr><th>Material</th><th>Pedidos</th><th></th></tr></thead><tbody id="tm"></tbody></table></div>
+</div>
+{% endblock %}
+{% block js %}<script>
+function recargar(){api('GET','/api/materiales').then(function(L){$('tm').innerHTML=L.map(function(m){return '<tr><td>'+esc(m.nombre)+'</td><td>'+m.pedidos+'</td><td><button class="btn d" onclick="twoStep(this,function(){api(\'DELETE\',\'/api/materiales/'+m.id+'\').then(recargar,falla)})">Eliminar</button></td></tr>'}).join('')||'<tr><td colspan="3" style="color:var(--mut)">Aún no hay materiales.</td></tr>'},falla)}
+recargar();
+</script>{% endblock %}
